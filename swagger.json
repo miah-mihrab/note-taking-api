@@ -1,0 +1,38 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "Note Taking API",
+        "description": "This is a simple Note Taking Api",
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        }
+    },
+    "paths": {
+        "/signin": {
+            "post": {
+                "x-swagger-router-controller": "bar",
+                "operationId": "impossible",
+                "tags": [
+                    "signin"
+                ],
+                "description": "",
+                "parameters": [],
+                "responses": {}
+            }
+        },
+        "/user/note": {
+            "get": {
+                "x-swagger-router-controller": "bar",
+                "operationId": "impossible",
+                "tags": [
+                    "notes"
+                ],
+                "description": "",
+                "parameters": [],
+                "responses": {}
+            }
+        }
+    }
+}

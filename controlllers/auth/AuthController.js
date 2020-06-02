@@ -1,16 +1,21 @@
+const firebase = require('firebase');
+const auth = firebase.auth();
+const jwt = require('jsonwebtoken');
 
 const User = require('../../model/usermodel');
+
 (
     exports.signUp = (async (req, res, next) => {
         try {
-            const user = new User(req.body);
-            await user.save()
-            const token = user.generateAuthToken();
-            return res.status(200).send({
-                success: true,
-                user,
-                token
-            })
+            auth
+                .createUserWithEmailAndPassword(req.body.email, req.body.password)
+                .then(() => {
+                    req.session.user = { uid: auth.currentUser.uid, email: auth.currentUser.email }
+                    console.log(req.session.user)
+                    return res.send(req.session.user)
+                })
+
+
         } catch (err) {
             console.log(err);
             return next({
@@ -24,15 +29,16 @@ const User = require('../../model/usermodel');
     exports.signIn = (async (req, res, next) => {
         try {
             const { email, password } = req.body
-            const user = await User.findByCredentials(email, password)
-            console.log(user)
-            if (!user) {
-                return res.status(401).send({ error: 'Login failed! Check authentication credentials' })
-            }
-            const token = await user.generateAuthToken()
-            res.send({ user, token })
+            console.log(email, password, typeof (password))
+            auth.signInWithEmailAndPassword(email, password)
+                .then(() => {
+                    console.log("HERE")
+                    req.session.user = { uid: auth.currentUser.uid, email: auth.currentUser.email }
+                    console.log(req.session.user)
+                    return res.send(req.session.user)
+                })
         } catch (err) {
-
+            return next("Something went wrong")
         }
     })
 )
